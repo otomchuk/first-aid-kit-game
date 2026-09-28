@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Check, Copy, Heart, RotateCcw, Share2, X } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { CAMPAIGN } from '@/lib/campaign'
-import { challengeUrl, formatDuration, plural } from '@/lib/challenge'
+import { challengeUrl, plural } from '@/lib/challenge'
 import { cn } from '@/lib/utils'
 import { formatTime } from './format-time'
 
@@ -47,17 +47,7 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
     }
   }, [onClose, popoverOpen])
 
-  async function share() {
-    const url = challengeUrl(seconds)
-    const text = `Я зібрав(ла) аптечку за ${formatDuration(seconds)} і ${moves} ${movesLabel}. Зможеш швидше?`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: 'Аптечку зібрано!', text, url })
-        return
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return
-      }
-    }
+  function share() {
     setCopied(false)
     setPopoverOpen((open) => !open)
   }
@@ -72,12 +62,12 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="win-title"
-        className="animate-drop-in relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl"
+        className="animate-drop-in my-auto max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl"
       >
         <button
           type="button"
@@ -118,8 +108,8 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
             <Heart className="size-5" />
             Задонатити на аптечку
           </a>
-          <div className="grid grid-cols-2 gap-2">
-            <div ref={shareRef} className="relative">
+          <div ref={shareRef} className="flex flex-col gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <Button
                 variant="secondary"
                 size="lg"
@@ -131,29 +121,29 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
                 <Share2 />
                 Поділитися
               </Button>
-              {popoverOpen && (
-                <div
-                  id="share-popover"
-                  className="animate-drop-in absolute bottom-full left-0 z-10 mb-2 w-72 max-w-[calc(100vw-4rem)] rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-2xl"
-                >
-                  <p className="font-display text-lg tracking-wide uppercase">Кинь виклик друзям</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Я зібрав(ла) аптечку за {formatTime(seconds * 1000)}. Зможеш швидше?
-                  </p>
-                  <Button size="lg" className="mt-3 h-10 w-full" onClick={copyLink}>
-                    {copied ? <Check /> : <Copy />}
-                    {copied ? 'Посилання скопійовано' : 'Копіювати посилання'}
-                  </Button>
-                  <span className="sr-only" aria-live="polite">
-                    {copied ? 'Посилання скопійовано' : ''}
-                  </span>
-                </div>
-              )}
+              <Button variant="outline" size="lg" className="h-11" onClick={onReplay}>
+                <RotateCcw />
+                Ще раз
+              </Button>
             </div>
-            <Button variant="outline" size="lg" className="h-11" onClick={onReplay}>
-              <RotateCcw />
-              Ще раз
-            </Button>
+            {popoverOpen && (
+              <div
+                id="share-popover"
+                className="rounded-lg border border-border bg-muted/50 p-4 text-popover-foreground"
+              >
+                <p className="font-display text-lg tracking-wide uppercase">Кинь виклик друзям</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Я зібрав(ла) аптечку за {formatTime(seconds * 1000)}. Зможеш швидше?
+                </p>
+                <Button variant="secondary" size="lg" className="mt-3 h-10 w-full" onClick={copyLink}>
+                  {copied ? <Check /> : <Copy />}
+                  {copied ? 'Посилання скопійовано' : 'Копіювати'}
+                </Button>
+                <span className="sr-only" aria-live="polite">
+                  {copied ? 'Посилання скопійовано' : ''}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
