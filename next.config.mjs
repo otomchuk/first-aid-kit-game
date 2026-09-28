@@ -1,11 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  images: {
-    unoptimized: true,
-  },
+  output: 'export',
+  basePath: '/first-aid-kit-game',
+  images: { unoptimized: true },
+  trailingSlash: true,
 }
 
 export default nextConfig

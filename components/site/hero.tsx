@@ -14,7 +14,7 @@ export function Hero() {
           Оголошуємо збір на 700 000 гривень для закупівлі 200 IFAK для наших захисників.
           Спакуй тактичну аптечку, а потім допоможи зібрати справжні IFAK для наших
           захисників.
-        </p>
+        </p>ро
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="#game" className={cn(buttonVariants({ size: 'lg' }), 'h-12 px-5 text-base')}>
             <Play className="size-5" />
