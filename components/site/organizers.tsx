@@ -1,4 +1,5 @@
 import { CAMPAIGN } from '@/lib/campaign'
+import { asset } from '@/lib/utils'
 import { InstagramIcon } from './instagram-icon'
 
 export function Organizers() {
@@ -48,7 +49,7 @@ export function Organizers() {
                   <p className="mt-1 text-lg text-muted-foreground">{item.label}</p>
                 </div>
                 <img
-                  src={item.image}
+                  src={asset(item.image)}
                   alt={item.alt}
                   className="h-28 w-36 object-contain mix-blend-lighten md:h-40 md:w-48"
                 />

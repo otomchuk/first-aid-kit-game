@@ -2,7 +2,7 @@ import { Heart } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { CAMPAIGN } from '@/lib/campaign'
 import { KIT_ITEMS } from '@/lib/game-items'
-import { cn } from '@/lib/utils'
+import { asset, cn } from '@/lib/utils'
 
 export function KitContents() {
   return (
@@ -25,7 +25,7 @@ export function KitContents() {
           <li key={item.id} className="flex flex-col gap-3 rounded-xl border border-border bg-card p-3">
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-white">
               <img
-                src={item.src || '/placeholder.svg'}
+                src={asset(item.src || '/placeholder.svg')}
                 alt={item.name}
                 className="absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] object-contain"
               />

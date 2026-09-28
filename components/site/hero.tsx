@@ -1,7 +1,7 @@
 import { Heart, Play } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { CAMPAIGN } from '@/lib/campaign'
-import { cn } from '@/lib/utils'
+import { asset, cn } from '@/lib/utils'
 
 export function Hero() {
   return (
@@ -14,7 +14,7 @@ export function Hero() {
           Оголошуємо збір на 700 000 гривень для закупівлі 200 IFAK для наших захисників.
           Спакуй тактичну аптечку, а потім допоможи зібрати справжні IFAK для наших
           захисників.
-        </p>ро
+        </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="#game" className={cn(buttonVariants({ size: 'lg' }), 'h-12 px-5 text-base')}>
             <Play className="size-5" />
@@ -37,7 +37,7 @@ export function Hero() {
           className="absolute inset-8 rounded-full bg-primary/20 blur-3xl"
         />
         <img
-          src="/ifak-pouch.jpg"
+          src={asset('/ifak-pouch.jpg')}
           alt="Тактична аптечка IFAK у камуфляжі з червоною ручкою та нашивкою з хрестом"
           className="relative w-full rounded-3xl"
         />

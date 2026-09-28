@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { ChevronLeft, ChevronRight, Play, Layers } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { InstagramPost } from '@/lib/instagram'
+import { asset } from '@/lib/utils'
 
 const dateFormatter = new Intl.DateTimeFormat('uk-UA', { day: 'numeric', month: 'long' })
 
@@ -35,7 +36,7 @@ export function InstagramCarousel({ posts }: { posts: InstagramPost[] }) {
             >
               <div className="relative aspect-square overflow-hidden bg-muted">
                 <img
-                  src={post.imageUrl || '/placeholder.svg'}
+                  src={post.imageUrl || asset('/placeholder.svg')}
                   alt={post.caption ? post.caption.slice(0, 120) : 'Публікація TacMed Help в Instagram'}
                   loading="lazy"
                   className="size-full object-cover transition-transform duration-300 group-hover:scale-105"

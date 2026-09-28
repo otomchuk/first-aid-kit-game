@@ -1,5 +1,5 @@
 import type { KitItem } from '@/lib/game-items'
-import { cn } from '@/lib/utils'
+import { asset, cn } from '@/lib/utils'
 
 type ItemVisualProps = {
   item: KitItem
@@ -25,7 +25,7 @@ export function ItemVisual({ item, rotated, className }: ItemVisualProps) {
     >
       <div className="absolute top-1/2 left-1/2 p-0.5" style={innerStyle}>
         <img
-          src={item.src || '/placeholder.svg'}
+          src={asset(item.src || '/placeholder.svg')}
           alt=""
           draggable={false}
           className="pointer-events-none h-full w-full object-contain select-none"
