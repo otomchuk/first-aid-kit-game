@@ -14,14 +14,17 @@ export default function Page() {
     <>
       <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-          <a href="#" className="flex items-center gap-2 font-display text-lg tracking-wide uppercase">
+          <a href="#" className="flex items-center gap-2 text-foreground">
             <span
               aria-hidden="true"
-              className="flex size-7 items-center justify-center rounded-md bg-primary text-lg font-bold text-primary-foreground"
+              className="relative flex size-8 items-center justify-center rounded-full bg-foreground text-background shadow-sm ring-1 ring-border"
             >
-              +
+              <span className="absolute h-4 w-1 rounded-full bg-background" />
+              <span className="absolute h-1 w-4 rounded-full bg-background" />
             </span>
-            Збери аптечку
+            <span className="font-display text-base font-semibold uppercase tracking-[0.12em] text-foreground">
+              збери аптечку
+            </span>
           </a>
           <a
             href={CAMPAIGN.donateUrl}

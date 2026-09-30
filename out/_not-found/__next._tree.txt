@@ -1,2 +1,2 @@
-:HL["/first-aid-kit-game/_next/static/chunks/2i9sut6q7g8nd.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"zE5tM-TSD7ZNneZ_vZjtX"}
+:HL["/_next/static/chunks/0a7w35c4amk5u.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"vaYrPL4j2oMARShFc0XgT"}
