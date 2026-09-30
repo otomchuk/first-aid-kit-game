@@ -53,9 +53,28 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
   }
 
   async function copyLink() {
+    const value = challengeUrl(seconds)
+    setCopied(false)
+
     try {
-      await navigator.clipboard.writeText(challengeUrl(seconds))
-      setCopied(true)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value)
+        setCopied(true)
+        return
+      }
+
+      const textarea = document.createElement('textarea')
+      textarea.value = value
+      textarea.setAttribute('readonly', '')
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      textarea.style.left = '-9999px'
+      document.body.appendChild(textarea)
+      textarea.select()
+
+      const success = document.execCommand('copy')
+      document.body.removeChild(textarea)
+      setCopied(success)
     } catch {
       setCopied(false)
     }
