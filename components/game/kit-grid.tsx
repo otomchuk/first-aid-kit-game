@@ -37,7 +37,7 @@ export const KitGrid = forwardRef<HTMLDivElement, KitGridProps>(function KitGrid
   const previewSize = previewItem && preview ? footprint(previewItem, preview.rotated) : null
 
   return (
-    <div className="relative mx-auto w-full max-w-[min(100%,calc(68svh*0.75))]">
+    <div className="relative mx-auto w-full max-w-[min(100%,22rem)] sm:max-w-[min(100%,26rem)] lg:max-w-[min(100%,calc(68svh*0.75))]">
       <div
         aria-hidden="true"
         className="mx-auto h-5 w-28 rounded-t-2xl border-4 border-b-0 border-primary"

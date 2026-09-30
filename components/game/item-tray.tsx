@@ -27,7 +27,11 @@ export function ItemTray({
   return (
     <section
       aria-labelledby="tray-title"
-      className="flex h-full flex-col rounded-2xl border border-border bg-card p-4"
+      className={cn(
+        'flex h-full flex-col rounded-2xl border border-border bg-card p-4',
+        'sticky bottom-2 z-20 mx-auto w-full max-w-full bg-card/95 backdrop-blur-sm shadow-sm',
+        'lg:static lg:bg-card lg:shadow-none lg:backdrop-blur-none',
+      )}
     >
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <h3 id="tray-title" className="font-display text-lg tracking-wide uppercase">
@@ -43,7 +47,10 @@ export function ItemTray({
           Усе спорядження вже в аптечці.
         </p>
       ) : (
-        <ul key={round} className="flex flex-wrap items-end gap-3">
+        <ul
+          key={round}
+          className="flex w-max max-w-full items-end gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
           {remaining.map((item, index) => {
             const rotated = trayRotation[item.id] ?? false
             const size = footprint(item, rotated)

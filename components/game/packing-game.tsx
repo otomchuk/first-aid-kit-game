@@ -298,7 +298,7 @@ export function PackingGame() {
         />
       </div>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="flex flex-col gap-4 lg:grid lg:items-start lg:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <KitGrid
           ref={gridRef}
           placements={placements}
@@ -309,7 +309,7 @@ export function PackingGame() {
           onItemPointerDown={startDrag}
         />
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 lg:flex">
           <ItemTray
             round={round}
             placements={placements}
