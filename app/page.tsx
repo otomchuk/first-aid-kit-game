@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Heart } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { PackingGame } from '@/components/game/packing-game'
@@ -15,13 +16,14 @@ export default function Page() {
       <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <a href="#" className="flex items-center gap-2 text-foreground">
-            <span
-              aria-hidden="true"
-              className="relative flex size-8 items-center justify-center rounded-full bg-foreground text-background shadow-sm ring-1 ring-border"
-            >
-              <span className="absolute h-4 w-1 rounded-full bg-background" />
-              <span className="absolute h-1 w-4 rounded-full bg-background" />
-            </span>
+            <Image
+              src="/TACMEDHELP_logo.png"
+              alt="TACMEDHELP logo"
+              width={120}
+              height={28}
+              className="h-7 w-auto object-contain"
+              priority
+            />
             <span className="font-display text-base font-semibold uppercase tracking-[0.12em] text-foreground">
               збери аптечку
             </span>
