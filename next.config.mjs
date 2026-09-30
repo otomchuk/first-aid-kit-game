@@ -1,4 +1,4 @@
-const basePath = '/first-aid-kit-game'
+const basePath = ''
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
