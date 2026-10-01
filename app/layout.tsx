@@ -36,6 +36,13 @@ export default function RootLayout({
     <html lang="uk" className={`${inter.variable} ${oswald.variable}`}>
       <body className="antialiased">
         {children}
+        {/* Cloudflare Web Analytics */}
+        <script
+          type="module"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "e1c0e6d47ac043eea07d5b21cd2ef172"}'
+        />
+        {/* End Cloudflare Web Analytics */}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
