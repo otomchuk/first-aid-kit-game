@@ -17,4 +17,4 @@
 :HL["/items/dressings.png","image"]
 :HL["/items/gloves.png","image"]
 :HL["/items/needle.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"7GJRzXoeYPKIg3FsuFn0P"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"T8hs-CFZXrfTWv-ZrrPQk"}
