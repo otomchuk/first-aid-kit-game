@@ -61,7 +61,7 @@ export const KitGrid = forwardRef<HTMLDivElement, KitGridProps>(function KitGrid
           className="relative aspect-[3/4] w-full rounded-lg border-2 border-dashed border-accent/60 bg-background/60"
           style={{
             backgroundImage:
-              'linear-gradient(to right, color-mix(in oklch, var(--accent) 14%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklch, var(--accent) 14%, transparent) 1px, transparent 1px)',
+              'linear-gradient(to right, color-mix(in oklch, var(--foreground) 28%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 28%, transparent) 1px, transparent 1px)',
             backgroundSize: `calc(100% / ${GRID_COLS}) calc(100% / ${GRID_ROWS})`,
           }}
         >

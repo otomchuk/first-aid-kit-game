@@ -37,7 +37,7 @@ export function Hero() {
           className="absolute inset-8 rounded-full bg-primary/20 blur-3xl"
         />
         <img
-          src={asset('/ifak-pouch.jpg')}
+          src={asset('/ifak-pouch.png')}
           alt="Тактична аптечка IFAK у камуфляжі з червоною ручкою та нашивкою з хрестом"
           className="relative w-full rounded-3xl"
         />

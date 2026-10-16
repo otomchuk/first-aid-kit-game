@@ -14,7 +14,7 @@ export const CAMPAIGN = {
     {
       value: '4300+',
       label: 'аптечок',
-      image: '/ifak-pouch.jpg',
+      image: '/ifak-pouch.png',
       alt: 'Тактична аптечка IFAK у камуфляжі з червоною ручкою',
     },
     {
