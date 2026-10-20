@@ -4,12 +4,13 @@ import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'rea
 import { Move, RotateCcw, RotateCw, Timer, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { formatDuration, parseChallenge } from '@/lib/challenge'
+import { COPY, type Locale } from '@/lib/i18n'
 import {
   GRID_COLS,
-  ITEMS_BY_ID,
-  KIT_ITEMS,
   canPlace,
   footprint,
+  getItemsById,
+  getKitItems,
   type Placement,
 } from '@/lib/game-items'
 import { formatTime } from './format-time'
@@ -35,7 +36,10 @@ type DragState = {
 
 const ROTATE_KEYS = new Set(['r', 'R', 'к', 'К', ' '])
 
-export function PackingGame() {
+export function PackingGame({ locale }: { locale: Locale }) {
+  const copy = COPY[locale]
+  const kitItems = getKitItems(locale)
+  const itemsById = getItemsById(locale)
   const gridRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<DragState | null>(null)
   const placementsRef = useRef<Record<string, Placement>>({})
@@ -57,7 +61,7 @@ export function PackingGame() {
   }, [])
 
   const placedCount = Object.keys(placements).length
-  const complete = placedCount === KIT_ITEMS.length
+  const complete = placedCount === kitItems.length
 
   useEffect(() => {
     placementsRef.current = placements
@@ -79,7 +83,7 @@ export function PackingGame() {
     if (!grid) return { ...d, target: null }
     const rect = grid.getBoundingClientRect()
     const cell = rect.width / GRID_COLS
-    const item = ITEMS_BY_ID[d.id]
+    const item = itemsById[d.id]
     const size = footprint(item, d.rotated)
     const left = d.px - d.fx * size.w * d.cell
     const top = d.py - d.fy * size.h * d.cell
@@ -107,7 +111,7 @@ export function PackingGame() {
         return
       }
       const rotatedPlacement = { ...origin, rotated: !origin.rotated }
-      if (canPlace(ITEMS_BY_ID[id], rotatedPlacement, placementsRef.current)) {
+      if (canPlace(itemsById[id], rotatedPlacement, placementsRef.current)) {
         setPlacements((p) => ({ ...p, [id]: rotatedPlacement }))
       } else {
         shake(id)
@@ -133,7 +137,7 @@ export function PackingGame() {
       setStartedAt((s) => s ?? Date.now())
       const willComplete =
         !placementsRef.current[d.id] &&
-        Object.keys(placementsRef.current).length + 1 === KIT_ITEMS.length
+        Object.keys(placementsRef.current).length + 1 === kitItems.length
       if (willComplete && startedAt) setElapsed(Date.now() - startedAt)
       return
     }
@@ -233,7 +237,7 @@ export function PackingGame() {
   }
 
   const floating = drag?.moved ? drag : null
-  const floatingItem = floating ? ITEMS_BY_ID[floating.id] : null
+  const floatingItem = floating ? itemsById[floating.id] : null
   const floatingSize = floatingItem && floating ? footprint(floatingItem, floating.rotated) : null
   const preview = drag?.moved && drag.target?.inside ? drag.target : null
 
@@ -241,16 +245,17 @@ export function PackingGame() {
     <div className={isDragging ? 'cursor-grabbing select-none' : undefined}>
       {challenge !== null && !challengeDismissed && (
         <div className="animate-drop-in relative mb-4 rounded-2xl border border-accent/50 bg-accent/10 p-4 pr-12">
-          <p className="font-display text-xl tracking-wide uppercase">Тобі кинули виклик 👀</p>
+          <p className="font-display text-xl tracking-wide uppercase">{copy.game.challenge}</p>
           <p className="mt-1 text-muted-foreground">
-            Аптечку зібрали за{' '}
-            <strong className="text-foreground">{formatDuration(challenge)}</strong>. Поб’єш
-            результат?
+            {copy.game.challengeTime.replace(
+              '{time}',
+              formatDuration(challenge, locale),
+            )}
           </p>
           <button
             type="button"
             onClick={() => setChallengeDismissed(true)}
-            aria-label="Сховати виклик"
+            aria-label={copy.game.hideChallenge}
             className="absolute top-3 right-3 rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <X className="size-5" />
@@ -261,40 +266,40 @@ export function PackingGame() {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <dl className="flex flex-wrap gap-2 text-sm">
           <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
-            <dt className="sr-only">Спаковано</dt>
+            <dt className="sr-only">{copy.game.packed}</dt>
             <dd className="font-display text-base tabular-nums">
-              {placedCount}/{KIT_ITEMS.length}
+              {placedCount}/{kitItems.length}
             </dd>
-            <span className="text-muted-foreground">в аптечці</span>
+            <span className="text-muted-foreground">{copy.game.inKit}</span>
           </div>
           <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
             <Timer className="size-4 text-muted-foreground" aria-hidden="true" />
-            <dt className="sr-only">Час</dt>
+            <dt className="sr-only">{copy.game.time}</dt>
             <dd className="font-display text-base tabular-nums">{formatTime(elapsed)}</dd>
           </div>
           <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
             <Move className="size-4 text-muted-foreground" aria-hidden="true" />
-            <dt className="sr-only">Ходи</dt>
+            <dt className="sr-only">{copy.game.moves}</dt>
             <dd className="font-display text-base tabular-nums">{moves}</dd>
           </div>
         </dl>
         <Button variant="outline" size="lg" onClick={reset}>
           <RotateCcw />
-          Почати знову
+          {copy.game.restart}
         </Button>
       </div>
 
       <div
         className="mb-4 h-2 overflow-hidden rounded-full bg-muted"
         role="progressbar"
-        aria-label="Прогрес пакування"
+        aria-label={copy.game.progress}
         aria-valuemin={0}
-        aria-valuemax={KIT_ITEMS.length}
+        aria-valuemax={kitItems.length}
         aria-valuenow={placedCount}
       >
         <div
           className="h-full rounded-full bg-success transition-all duration-500"
-          style={{ width: `${(placedCount / KIT_ITEMS.length) * 100}%` }}
+          style={{ width: `${(placedCount / kitItems.length) * 100}%` }}
         />
       </div>
 
@@ -302,6 +307,7 @@ export function PackingGame() {
         <KitGrid
           ref={gridRef}
           placements={placements}
+          locale={locale}
           draggingId={drag?.moved ? drag.id : null}
           preview={preview}
           shakeId={shakeId}
@@ -312,6 +318,7 @@ export function PackingGame() {
         <div className="flex flex-col gap-4 lg:flex">
           <ItemTray
             round={round}
+            locale={locale}
             placements={placements}
             trayRotation={trayRotation}
             draggingId={drag?.moved ? drag.id : null}
@@ -321,17 +328,15 @@ export function PackingGame() {
           <ul className="grid gap-2 rounded-2xl border border-border bg-card/60 p-4 text-sm text-muted-foreground">
             <li className="flex gap-2">
               <Move className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
-              Перетягни предмет в аптечку — зелений контур означає, що місця достатньо.
-              Усі предмети заповнюють аптечку повністю, без жодної порожньої клітинки.
+              {copy.game.instructions[0]}
             </li>
             <li className="flex gap-2">
               <RotateCw className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
-              Торкнись предмета, щоб повернути його. Під час перетягування — клавіша R або
-              права кнопка миші.
+              {copy.game.instructions[1]}
             </li>
             <li className="flex gap-2">
               <RotateCcw className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
-              Щоб дістати предмет, перетягни його за межі аптечки.
+              {copy.game.instructions[2]}
             </li>
           </ul>
         </div>
@@ -354,6 +359,7 @@ export function PackingGame() {
 
       {complete && !dialogDismissed && (
         <WinDialog
+          locale={locale}
           timeMs={elapsed}
           moves={moves}
           challengeSeconds={challenge}

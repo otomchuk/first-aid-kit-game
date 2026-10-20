@@ -23,8 +23,16 @@ export function plural(n: number, one: string, few: string, many: string) {
   return many
 }
 
-export function formatDuration(seconds: number) {
-  if (seconds < 60) return `${seconds} ${plural(seconds, 'секунду', 'секунди', 'секунд')}`
+export function formatDuration(seconds: number, locale: 'uk' | 'en' = 'uk') {
+  if (seconds < 60) {
+    const unit =
+      locale === 'uk'
+        ? plural(seconds, 'секунду', 'секунди', 'секунд')
+        : seconds === 1
+          ? 'second'
+          : 'seconds'
+    return `${seconds} ${unit}`
+  }
   const m = Math.floor(seconds / 60)
   const s = seconds % 60
   return `${m}:${s.toString().padStart(2, '0')}`

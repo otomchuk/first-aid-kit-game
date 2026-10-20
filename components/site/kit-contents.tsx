@@ -1,10 +1,14 @@
 import { Heart } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { CAMPAIGN } from '@/lib/campaign'
-import { KIT_ITEMS } from '@/lib/game-items'
+import { getKitItems } from '@/lib/game-items'
+import { COPY, type Locale } from '@/lib/i18n'
 import { asset, cn } from '@/lib/utils'
 
-export function KitContents() {
+export function KitContents({ locale }: { locale: Locale }) {
+  const copy = COPY[locale]
+  const items = getKitItems(locale)
+
   return (
     <section aria-labelledby="contents-title" className="mx-auto max-w-6xl px-4 py-16">
       <div className="mb-8 max-w-2xl">
@@ -12,16 +16,15 @@ export function KitContents() {
           id="contents-title"
           className="font-display text-3xl font-semibold tracking-tight uppercase md:text-4xl"
         >
-          Що входить в аптечку
+          {copy.contentsTitle}
         </h2>
         <p className="mt-3 text-pretty text-muted-foreground">
-          Кожен предмет у грі — це реальне спорядження, яке ми купуємо для бійців. Твій
-          донат перетворює гру на справжню аптечку на передовій.
+          {copy.contentsDescription}
         </p>
       </div>
 
       <ul className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {KIT_ITEMS.map((item) => (
+        {items.map((item) => (
           <li key={item.id} className="flex flex-col gap-3 rounded-xl border border-border bg-card p-3">
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-white">
               <img
@@ -41,11 +44,10 @@ export function KitContents() {
       <div className="mt-12 flex flex-col items-start justify-between gap-6 rounded-2xl border border-primary/40 bg-primary/10 p-6 md:flex-row md:items-center md:p-8">
         <div>
           <h2 className="font-display text-2xl font-semibold uppercase">
-            Одна аптечка — один врятований шанс
+            {copy.oneKitTitle}
           </h2>
           <p className="mt-2 max-w-xl text-muted-foreground">
-            Долучайся до збору: навіть невеликий внесок наближає нас до повного комплекту
-            для ще одного бійця.
+            {copy.oneKitDescription}
           </p>
         </div>
         <a
@@ -55,7 +57,7 @@ export function KitContents() {
           className={cn(buttonVariants({ size: 'lg' }), 'h-12 shrink-0 px-6 text-base')}
         >
           <Heart className="size-5" />
-          Підтримати збір
+          {copy.supportCampaign}
         </a>
       </div>
     </section>

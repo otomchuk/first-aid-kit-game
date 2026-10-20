@@ -2,17 +2,19 @@ import { forwardRef, type PointerEvent } from 'react'
 import {
   GRID_COLS,
   GRID_ROWS,
-  ITEMS_BY_ID,
   footprint,
+  getItemsById,
   type Placement,
 } from '@/lib/game-items'
 import { cn } from '@/lib/utils'
+import { COPY, type Locale } from '@/lib/i18n'
 import { ItemVisual } from './item-visual'
 
 export type DropPreview = Placement & { id: string; valid: boolean }
 
 type KitGridProps = {
   placements: Record<string, Placement>
+  locale: Locale
   draggingId: string | null
   preview: DropPreview | null
   shakeId: string | null
@@ -30,10 +32,12 @@ function boxStyle(p: Placement, w: number, h: number) {
 }
 
 export const KitGrid = forwardRef<HTMLDivElement, KitGridProps>(function KitGrid(
-  { placements, draggingId, preview, shakeId, complete, onItemPointerDown },
+  { placements, locale, draggingId, preview, shakeId, complete, onItemPointerDown },
   ref,
 ) {
-  const previewItem = preview ? ITEMS_BY_ID[preview.id] : null
+  const copy = COPY[locale]
+  const itemsById = getItemsById(locale)
+  const previewItem = preview ? itemsById[preview.id] : null
   const previewSize = previewItem && preview ? footprint(previewItem, preview.rotated) : null
 
   return (
@@ -49,7 +53,7 @@ export const KitGrid = forwardRef<HTMLDivElement, KitGridProps>(function KitGrid
         )}
       >
         <div className="mb-2 flex items-center justify-between px-1 font-display text-xs tracking-widest text-muted-foreground uppercase">
-          <span>IFAK · Контур аптечки</span>
+          <span>{copy.game.kitLabel}</span>
           <span className="flex size-5 items-center justify-center rounded-sm bg-primary text-sm font-bold text-primary-foreground">
             +
           </span>
@@ -57,7 +61,9 @@ export const KitGrid = forwardRef<HTMLDivElement, KitGridProps>(function KitGrid
         <div
           ref={ref}
           role="grid"
-          aria-label={`Аптечка ${GRID_COLS} на ${GRID_ROWS} клітинок`}
+          aria-label={copy.game.kitAria
+            .replace('{width}', String(GRID_COLS))
+            .replace('{height}', String(GRID_ROWS))}
           className="relative aspect-[3/4] w-full rounded-lg border-2 border-dashed border-accent/60 bg-background/60"
           style={{
             backgroundImage:
@@ -79,13 +85,13 @@ export const KitGrid = forwardRef<HTMLDivElement, KitGridProps>(function KitGrid
           )}
 
           {Object.entries(placements).map(([id, p]) => {
-            const item = ITEMS_BY_ID[id]
+            const item = itemsById[id]
             const size = footprint(item, p.rotated)
             return (
               <button
                 key={id}
                 type="button"
-                aria-label={`${item.name} — у аптечці. Торкніться, щоб повернути, або перетягніть.`}
+                aria-label={copy.game.placedItemAria.replace('{name}', item.name)}
                 onPointerDown={(e) => onItemPointerDown(id, e)}
                 className={cn(
                   'absolute cursor-grab touch-none p-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring',

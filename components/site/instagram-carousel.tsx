@@ -4,12 +4,16 @@ import { useRef } from 'react'
 import { ChevronLeft, ChevronRight, Play, Layers } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { InstagramPost } from '@/lib/instagram'
+import { COPY, type Locale } from '@/lib/i18n'
 import { asset } from '@/lib/utils'
 
-const dateFormatter = new Intl.DateTimeFormat('uk-UA', { day: 'numeric', month: 'long' })
-
-export function InstagramCarousel({ posts }: { posts: InstagramPost[] }) {
+export function InstagramCarousel({ posts, locale }: { posts: InstagramPost[]; locale: Locale }) {
   const trackRef = useRef<HTMLUListElement>(null)
+  const copy = COPY[locale]
+  const dateFormatter = new Intl.DateTimeFormat(locale === 'uk' ? 'uk-UA' : 'en-US', {
+    day: 'numeric',
+    month: 'long',
+  })
 
   const scrollByCard = (direction: 1 | -1) => {
     const track = trackRef.current
@@ -23,7 +27,7 @@ export function InstagramCarousel({ posts }: { posts: InstagramPost[] }) {
     <div className="relative">
       <ul
         ref={trackRef}
-        aria-label="Останні публікації в Instagram"
+        aria-label={copy.instagramPosts}
         className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {posts.map((post) => (
@@ -37,14 +41,14 @@ export function InstagramCarousel({ posts }: { posts: InstagramPost[] }) {
               <div className="relative aspect-square overflow-hidden bg-muted">
                 <img
                   src={post.imageUrl || asset('/placeholder.svg')}
-                  alt={post.caption ? post.caption.slice(0, 120) : 'Публікація TacMed Help в Instagram'}
+                  alt={post.caption ? post.caption.slice(0, 120) : copy.instagramPostAlt}
                   loading="lazy"
                   className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 {post.mediaType !== 'IMAGE' && (
                   <span className="absolute top-2 right-2 rounded-md bg-black/60 p-1 text-white">
                     {post.mediaType === 'VIDEO' ? <Play className="size-4" /> : <Layers className="size-4" />}
-                    <span className="sr-only">{post.mediaType === 'VIDEO' ? 'Відео' : 'Кілька фото'}</span>
+                    <span className="sr-only">{post.mediaType === 'VIDEO' ? copy.video : copy.multiplePhotos}</span>
                   </span>
                 )}
               </div>
@@ -60,10 +64,10 @@ export function InstagramCarousel({ posts }: { posts: InstagramPost[] }) {
       </ul>
 
       <div className="mt-2 flex justify-end gap-2">
-        <Button variant="outline" size="icon" onClick={() => scrollByCard(-1)} aria-label="Попередні публікації">
+        <Button variant="outline" size="icon" onClick={() => scrollByCard(-1)} aria-label={copy.previousPosts}>
           <ChevronLeft />
         </Button>
-        <Button variant="outline" size="icon" onClick={() => scrollByCard(1)} aria-label="Наступні публікації">
+        <Button variant="outline" size="icon" onClick={() => scrollByCard(1)} aria-label={copy.nextPosts}>
           <ChevronRight />
         </Button>
       </div>

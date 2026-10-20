@@ -1,8 +1,23 @@
+import { COPY, type Locale } from './i18n'
+
 export const GRID_COLS = 6
 export const GRID_ROWS = 8
 
+export type KitItemId =
+  | 'tourniquet'
+  | 'hemostatic'
+  | 'scissors'
+  | 'bandage'
+  | 'chest-seal'
+  | 'blanket'
+  | 'npa'
+  | 'splint'
+  | 'dressings'
+  | 'gloves'
+  | 'needle'
+
 export type KitItem = {
-  id: string
+  id: KitItemId
   name: string
   purpose: string
   src: string
@@ -110,6 +125,17 @@ export const KIT_ITEMS: KitItem[] = [
 export const ITEMS_BY_ID: Record<string, KitItem> = Object.fromEntries(
   KIT_ITEMS.map((item) => [item.id, item]),
 )
+
+export function getKitItems(locale: Locale) {
+  return KIT_ITEMS.map((item) => {
+    const [name, purpose] = COPY[locale].kitItems[item.id]
+    return { ...item, name, purpose }
+  })
+}
+
+export function getItemsById(locale: Locale): Record<string, KitItem> {
+  return Object.fromEntries(getKitItems(locale).map((item) => [item.id, item]))
+}
 
 export function footprint(item: KitItem, rotated: boolean) {
   return rotated ? { w: item.h, h: item.w } : { w: item.w, h: item.h }

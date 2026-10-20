@@ -1,9 +1,11 @@
 import { CAMPAIGN } from '@/lib/campaign'
+import { COPY, type Locale } from '@/lib/i18n'
 import { asset } from '@/lib/utils'
 import { InstagramIcon } from './instagram-icon'
 
-export function Organizers() {
+export function Organizers({ locale }: { locale: Locale }) {
   const { organizer, delivered } = CAMPAIGN
+  const copy = COPY[locale]
 
   return (
     <section
@@ -17,10 +19,10 @@ export function Organizers() {
             id="organizers-title"
             className="font-display text-3xl font-semibold tracking-tight uppercase md:text-4xl"
           >
-            Організатори
+            {copy.organizers}
           </h2>
           <p className="mt-4 whitespace-pre-line text-pretty text-lg text-muted-foreground">
-            {organizer.description.join('\n')}
+            {copy.organizerDescription.join('\n')}
           </p>
           <a
             href={organizer.instagramUrl}
@@ -34,10 +36,10 @@ export function Organizers() {
 
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
           <h3 className="pt-8 pb-2 text-center font-display text-3xl font-semibold tracking-wide text-primary md:text-4xl">
-            передано
+            {copy.delivered}
           </h3>
           <ul className="divide-y divide-border md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
-            {delivered.map((item) => (
+            {delivered.map((item, index) => (
               <li
                 key={item.label}
                 className="grid grid-cols-[1fr_auto] items-center gap-4 px-6 py-8 md:grid-cols-1 md:justify-items-center md:text-center"
@@ -46,11 +48,11 @@ export function Organizers() {
                   <p className="font-display text-5xl font-semibold tracking-tight md:text-6xl">
                     {item.value}
                   </p>
-                  <p className="mt-1 text-lg text-muted-foreground">{item.label}</p>
+                  <p className="mt-1 text-lg text-muted-foreground">{copy.deliveredItems[index].label}</p>
                 </div>
                 <img
                   src={asset(item.image)}
-                  alt={item.alt}
+                  alt={copy.deliveredItems[index].alt}
                   className="h-28 w-36 object-contain mix-blend-lighten md:h-40 md:w-48"
                 />
               </li>

@@ -1,9 +1,9 @@
-:HL["/_next/static/chunks/3slk2w-11inv1.css","style"]
+:HL["/_next/static/chunks/0qfzzn1n2c5im.css","style"]
 :HL["/_next/static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/8e410338cab7e12e-s.p.2888ryxa0751p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/9a800f173b8d9e8f-s.p.3nglv5iys3s0a.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/9c72aa0f40e4eef8-s.p.1y4-pdgsjb-pw.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/ifak-pouch.jpg","image"]
+:HL["/ifak-pouch.png","image"]
 :HL["/items/tourniquet.png","image"]
 :HL["/items/hemostatic.png","image"]
 :HL["/items/scissors.png","image"]
@@ -17,4 +17,4 @@
 :HL["/items/dressings.png","image"]
 :HL["/items/gloves.png","image"]
 :HL["/items/needle.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"Hmt5qtnbHKmVGaPN3rTtI"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"(uk)","param":null,"prefetchHints":4208,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"xC4zbOteVq4xa8FsJxLqe"}

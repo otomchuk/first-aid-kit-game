@@ -1,10 +1,12 @@
 import type { PointerEvent } from 'react'
-import { KIT_ITEMS, footprint, type Placement } from '@/lib/game-items'
+import { footprint, getKitItems, type Placement } from '@/lib/game-items'
+import { COPY, type Locale } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { ItemVisual } from './item-visual'
 
 type ItemTrayProps = {
   round: number
+  locale: Locale
   placements: Record<string, Placement>
   trayRotation: Record<string, boolean>
   draggingId: string | null
@@ -16,13 +18,15 @@ const TRAY_CELL = 38
 
 export function ItemTray({
   round,
+  locale,
   placements,
   trayRotation,
   draggingId,
   shakeId,
   onItemPointerDown,
 }: ItemTrayProps) {
-  const remaining = KIT_ITEMS.filter((item) => !placements[item.id])
+  const copy = COPY[locale]
+  const remaining = getKitItems(locale).filter((item) => !placements[item.id])
 
   return (
     <section
@@ -35,16 +39,18 @@ export function ItemTray({
     >
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <h3 id="tray-title" className="font-display text-lg tracking-wide uppercase">
-          Спорядження
+          {copy.game.equipment}
         </h3>
         <span className="text-sm text-muted-foreground">
-          {remaining.length > 0 ? `Залишилось: ${remaining.length}` : 'Усе спаковано'}
+          {remaining.length > 0
+            ? copy.game.remaining.replace('{count}', String(remaining.length))
+            : copy.game.allPacked}
         </span>
       </div>
 
       {remaining.length === 0 ? (
         <p className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          Усе спорядження вже в аптечці.
+          {copy.game.allInKit}
         </p>
       ) : (
         <ul
@@ -62,7 +68,10 @@ export function ItemTray({
               >
                 <button
                   type="button"
-                  aria-label={`${item.name}, розмір ${size.w} на ${size.h}. Торкніться, щоб повернути, або перетягніть в аптечку.`}
+                  aria-label={copy.game.itemAria
+                    .replace('{name}', item.name)
+                    .replace('{width}', String(size.w))
+                    .replace('{height}', String(size.h))}
                   onPointerDown={(e) => onItemPointerDown(item.id, e)}
                   className={cn(
                     'cursor-grab touch-none rounded-md outline-none transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring',

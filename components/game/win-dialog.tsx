@@ -5,10 +5,12 @@ import { Check, Copy, Heart, RotateCcw, Share2, X } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { CAMPAIGN } from '@/lib/campaign'
 import { challengeUrl, plural } from '@/lib/challenge'
+import { COPY, type Locale } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { formatTime } from './format-time'
 
 type WinDialogProps = {
+  locale: Locale
   timeMs: number
   moves: number
   challengeSeconds: number | null
@@ -16,15 +18,33 @@ type WinDialogProps = {
   onClose: () => void
 }
 
-export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }: WinDialogProps) {
+export function WinDialog({ locale, timeMs, moves, challengeSeconds, onReplay, onClose }: WinDialogProps) {
   const donateRef = useRef<HTMLAnchorElement>(null)
   const shareRef = useRef<HTMLDivElement>(null)
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const seconds = Math.max(1, Math.floor(timeMs / 1000))
-  const movesLabel = plural(moves, 'хід', 'ходи', 'ходів')
+  const copy = COPY[locale].game
+  const movesLabel =
+    locale === 'uk'
+      ? plural(moves, 'хід', 'ходи', 'ходів')
+      : new Intl.PluralRules('en').select(moves) === 'one'
+        ? 'move'
+        : 'moves'
   const beatChallenge = challengeSeconds !== null && seconds < challengeSeconds
+  const challengeResult =
+    challengeSeconds === null
+      ? null
+      : beatChallenge
+        ? copy.challengeWon
+            .replace('{time}', formatTime(seconds * 1000))
+            .replace('{target}', formatTime(challengeSeconds * 1000))
+        : copy.challengeLost.replace('{target}', formatTime(challengeSeconds * 1000))
+  const winDescription = copy.winDescription
+    .replace('{time}', formatTime(timeMs))
+    .replace('{moves}', String(moves))
+    .replace('{moveLabel}', movesLabel)
 
   useEffect(() => {
     donateRef.current?.focus()
@@ -91,7 +111,7 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
         <button
           type="button"
           onClick={onClose}
-          aria-label="Закрити"
+          aria-label={copy.close}
           className="absolute top-3 right-3 rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <X className="size-5" />
@@ -101,20 +121,14 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
           +
         </div>
         <h2 id="win-title" className="font-display text-3xl tracking-wide uppercase">
-          Аптечку зібрано!
+          {copy.winTitle}
         </h2>
         {challengeSeconds !== null && (
           <p className={cn('mt-2 text-sm font-semibold', beatChallenge ? 'text-success' : 'text-accent')}>
-            {beatChallenge
-              ? `Виклик прийнято і побито: ${formatTime(seconds * 1000)} проти ${formatTime(challengeSeconds * 1000)}!`
-              : `До виклику не вистачило: треба було швидше за ${formatTime(challengeSeconds * 1000)}.`}
+            {challengeResult}
           </p>
         )}
-        <p className="mt-2 text-pretty text-muted-foreground">
-          Ти впорався за <strong className="text-foreground">{formatTime(timeMs)}</strong> і{' '}
-          <strong className="text-foreground">{moves}</strong> {movesLabel}. На фронті справжня
-          аптечка рятує життя за лічені хвилини — допоможи, щоб вона була в кожного бійця.
-        </p>
+        <p className="mt-2 text-pretty text-muted-foreground">{winDescription}</p>
 
         <div className="mt-6 flex flex-col gap-2">
           <a
@@ -125,7 +139,7 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
             className={cn(buttonVariants({ size: 'lg' }), 'h-12 text-base font-semibold')}
           >
             <Heart className="size-5" />
-            Задонатити на аптечку
+            {copy.donateForKit}
           </a>
           <div ref={shareRef} className="flex flex-col gap-2">
             <div className="grid grid-cols-2 gap-2">
@@ -138,11 +152,11 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
                 onClick={share}
               >
                 <Share2 />
-                Поділитися
+                {copy.share}
               </Button>
               <Button variant="outline" size="lg" className="h-11" onClick={onReplay}>
                 <RotateCcw />
-                Ще раз
+                {copy.replay}
               </Button>
             </div>
             {popoverOpen && (
@@ -150,16 +164,16 @@ export function WinDialog({ timeMs, moves, challengeSeconds, onReplay, onClose }
                 id="share-popover"
                 className="rounded-lg border border-border bg-muted/50 p-4 text-popover-foreground"
               >
-                <p className="font-display text-lg tracking-wide uppercase">Кинь виклик друзям</p>
+                <p className="font-display text-lg tracking-wide uppercase">{copy.challengeFriends}</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Я зібрав(ла) аптечку за {formatTime(seconds * 1000)}. Зможеш швидше?
+                  {copy.shareMessage.replace('{time}', formatTime(seconds * 1000))}
                 </p>
                 <Button variant="secondary" size="lg" className="mt-3 h-10 w-full" onClick={copyLink}>
                   {copied ? <Check /> : <Copy />}
-                  {copied ? 'Посилання скопійовано' : 'Копіювати'}
+                  {copied ? copy.linkCopied : copy.copy}
                 </Button>
                 <span className="sr-only" aria-live="polite">
-                  {copied ? 'Посилання скопійовано' : ''}
+                  {copied ? copy.linkCopied : ''}
                 </span>
               </div>
             )}
