@@ -138,7 +138,7 @@ export function WinDialog({ locale, timeMs, moves, challengeSeconds, onReplay, o
             rel="noopener noreferrer"
             className={cn(buttonVariants({ size: 'lg' }), 'h-12 text-base font-semibold')}
           >
-            <Heart className="size-5" />
+            <Heart className="size-5 animate-heart-pulse" />
             {copy.donateForKit}
           </a>
           <div ref={shareRef} className="flex flex-col gap-2">

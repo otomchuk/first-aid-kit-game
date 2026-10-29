@@ -56,7 +56,7 @@ export function KitContents({ locale }: { locale: Locale }) {
           rel="noopener noreferrer"
           className={cn(buttonVariants({ size: 'lg' }), 'h-12 shrink-0 px-6 text-base')}
         >
-          <Heart className="size-5" />
+          <Heart className="size-5 animate-heart-pulse" />
           {copy.supportCampaign}
         </a>
       </div>

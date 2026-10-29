@@ -46,7 +46,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               rel="noopener noreferrer"
               className={cn(buttonVariants({ size: 'lg' }))}
             >
-              <Heart />
+              <Heart className="animate-heart-pulse" />
               {copy.donate}
             </a>
           </nav>

@@ -25,7 +25,7 @@ export function Hero({ locale }: { locale: Locale }) {
             rel="noopener noreferrer"
             className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-12 px-5 text-base')}
           >
-            <Heart className="size-5" />
+            <Heart className="size-5 animate-heart-pulse" />
             {copy.donateToCampaign}
           </a>
         </div>
